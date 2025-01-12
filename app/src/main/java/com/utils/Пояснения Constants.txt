@@ -1,0 +1,16 @@
+Explain:
+
+package com.example.ridesharing.utils: Указывает пакет, в котором находится этот файл.
+object Constants: использовать object, чтобы создать синглтон, который удобен для хранения константы.
+Общие настройки:
+YANDEX_GEOCODING_URL: URL для API геокодирования Яндекса (замените на ваш реальный URL, если отличается).
+YANDEX_GEOCODING_API_KEY: Ваш ключ API для API геокодирования Яндекса (обязательно замените YOUR_YANDEX_GEOCODING_API_KEYна ваш реальный ключ API).
+Общие ключи настроек:
+PREF_SEARCH_RADIUS: Ключ для сохранения радиуса поиска в SharedPreferences.
+Настройки геолокации:
+LOCATION_REQUEST_INTERVAL: Интервал запроса местоположения в миллисекундах.
+LOCATION_FASTEST_INTERVAL: Самый быстрый интервал, с которым может приходить геолокация.
+Настройки места посещения:
+DEFAULT_SEARCH_RADIUS: Значение радиуса действия для осмотра в километрах.
+Firebase
+NOTIFICATION_CHANNEL_ID: ID канала для получения уведомлений.
