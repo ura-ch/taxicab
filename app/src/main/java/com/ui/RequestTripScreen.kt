@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.ridesharing.data.database.AppDatabase
 import com.example.ridesharing.utils.LocationUtils
-
+import com.ui.RegisterViewModel
 
 @Composable
 fun RequestTripScreen(database: AppDatabase, locationUtils: LocationUtils) {

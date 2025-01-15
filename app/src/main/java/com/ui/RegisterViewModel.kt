@@ -8,6 +8,9 @@ package com.example.ridesharing.ui.register
  import com.example.ridesharing.data.model.Driver
  import com.example.ridesharing.data.model.User
  import kotlinx.coroutines.launch
+ import com.data.repository.UserRepository
+ import com.network.ApiClient
+ import com.network.NetworkService
  import java.util.UUID
  
  class RegisterViewModel(private val database: AppDatabase) : ViewModel() {

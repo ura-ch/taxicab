@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mapScreen">
+
+    <fragment
+        android:id="@+id/mapScreen"
+        android:name="com.ui.MapScreen"
+       />
+    <fragment
+        android:id="@+id/registerScreen"
+        android:name="com.ui.RegisterScreen"
+       />
+    <fragment
+        android:id="@+id/requestTripScreen"
+        android:name="com.ui.RequestTripScreen"
+         />
+      <fragment
+        android:id="@+id/tripsListScreen"
+        android:name="com.ui.TripsListScreen"
+         />
+</navigation>

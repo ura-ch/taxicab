@@ -13,6 +13,7 @@ import com.example.ridesharing.ui.components.CustomButton
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.ui.RegisterViewModel
 
 @Composable
 fun RegisterScreen(navController: NavController, database: AppDatabase) {

@@ -1,0 +1,366 @@
+--- a/.gitignore
++++ b/.gitignore
+@@ -13,3 +13,4 @@
+ *.apk
+ *.ap_
+ 
++# added by URACH
+\ No newline at end of file
+--- a/app/build.gradle.kts
++++ b/app/build.gradle.kts
+@@ -1,13 +1,10 @@
+ plugins {
+-    id("com.android.application")
++    id("com.android.application")    
+     id("org.jetbrains.kotlin.android")
+     id("kotlin-kapt")
+     id("dagger.hilt.android.plugin")
+ }
+ 
+-
+-
+-
+ android {
+     namespace = "com.example.taxicab"
+     compileSdk = 33
+@@ -72,9 +69,7 @@
+     implementation("androidx.compose.ui:ui-tooling-preview")
+     implementation("androidx.compose.material3:material3")
+     testImplementation("junit:junit:4.13.2")
+-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+-    androidTestImplementation(platform("androidx.compose:compose-bom:2022.10.00"))
++    androidTestImplementation("androidx.test.ext:junit:1.1.5")    
++    androidTestImplementation(platform("androidx.compose:compose-bom:2022.10.00"))    
+     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+     debugImplementation("androidx.compose.ui:ui-tooling")
+     debugImplementation("androidx.compose.ui:ui-test-manifest")
+@@ -91,7 +86,7 @@
+         implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+ 
+         implementation ("com.squareup.okhttp3:okhttp:4.10.0")
+-        implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
++        implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0") 
+ 
+         implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+ 
+@@ -106,9 +101,10 @@
+         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+ 
+-        //DataStore
++        //DataStore  
+         implementation("androidx.datastore:datastore-preferences:1.0.0")
+-
++        
++        
+         implementation("androidx.compose.material:material-icons-core:1.3.1")
+         implementation("androidx.compose.material:material-icons-extended:1.3.1")
+ 
+--- a/app/src/main/java/com/example/taxicab/MainActivity.kt
++++ b/app/src/main/java/com/example/taxicab/MainActivity.kt
+@@ -2,19 +2,21 @@
+ 
+ import android.os.Bundle
+ import androidx.activity.ComponentActivity
+-import androidx.activity.compose.setContent
+-import androidx.compose.foundation.layout.fillMaxSize
+-import androidx.compose.material3.MaterialTheme
+-import androidx.compose.material3.Surface
+-import androidx.compose.ui.Modifier
++import androidx.activity.compose.setContent  
+ import com.example.taxicab.theme.TaxicabTheme
++import com.example.taxicab.ui.MainActivityScreen
++import dagger.hilt.android.AndroidEntryPoint
+ 
++@AndroidEntryPoint
+ class MainActivity : ComponentActivity() {
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContent {
+             TaxicabTheme {
+-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
++
++               MainActivityScreen()
++            }
++
++
++
++
++            /*  Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+ 
+                 }*/
+             }
+--- a/app/src/main/java/com/example/taxicab/MainApplication.kt
++++ b/app/src/main/java/com/example/taxicab/MainApplication.kt
+@@ -1,5 +1,10 @@
+ package com.example.taxicab
+ 
++import android.app.Application
++import dagger.hilt.android.HiltAndroidApp
+ 
+-class MainApplication {
++
++@HiltAndroidApp
++class MainApplication : Application(){
++
+ }
+--- a/app/src/main/java/com/example/taxicab/theme/Color.kt
++++ b/app/src/main/java/com/example/taxicab/theme/Color.kt
+@@ -1,6 +1,7 @@
+ package com.example.taxicab.theme
+ 
+ import androidx.compose.ui.graphics.Color
++
+ 
+ val Purple80 = Color(0xFFD0BCFF)
+ val PurpleGrey80 = Color(0xFFCCC2DC)
+--- a/app/src/main/java/com/example/taxicab/theme/Theme.kt
++++ b/app/src/main/java/com/example/taxicab/theme/Theme.kt
+@@ -2,6 +2,7 @@
+ 
+ import android.app.Activity
+ import androidx.compose.material3.MaterialTheme
++import androidx.compose.material3.lightColorScheme
+ import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.SideEffect
+ import androidx.compose.ui.graphics.toArgb
+@@ -10,7 +11,14 @@
+ @Composable
+ fun TaxicabTheme(
+     content: @Composable () -> Unit
+-
++){
++
++    val colorScheme = lightColorScheme(
++
++    )
++
++
++    MaterialTheme(
++       colorScheme = colorScheme,
+     ) {
+         val view = LocalView.current
+         if (!view.isInEditMode) {
+@@ -22,6 +30,6 @@
+             }
+         }
+         content()
+-    }
++    }    
+ 
+ }
+--- a/app/src/main/java/com/example/taxicab/theme/Type.kt
++++ b/app/src/main/java/com/example/taxicab/theme/Type.kt
+@@ -4,6 +4,7 @@
+ import androidx.compose.ui.text.TextStyle
+ import androidx.compose.ui.text.font.FontFamily
+ import androidx.compose.ui.text.font.FontWeight
++import androidx.compose.ui.text.style.TextAlign
+ import androidx.compose.ui.unit.sp
+ 
+ val Typography = Typography(
+@@ -19,5 +20,11 @@
+         fontWeight = FontWeight.Medium,
+         fontSize = 16.sp,
+         lineHeight = 24.sp,
++        textAlign = TextAlign.Left,
+         letterSpacing = 0.5.sp
+     ),
++    bodyLarge = TextStyle(
++        fontFamily = FontFamily.Default,
++        fontWeight = FontWeight.Normal,
++        fontSize = 16.sp
++    )
+ )
+--- a/app/src/main/java/com/example/taxicab/ui/HomeScreen.kt
++++ b/app/src/main/java/com/example/taxicab/ui/HomeScreen.kt
+@@ -1,10 +1,26 @@
+ package com.example.taxicab.ui
+ 
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.padding
++import androidx.compose.material3.Text
+ import androidx.compose.runtime.Composable
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.tooling.preview.Preview
++import androidx.compose.ui.unit.dp
++
+ 
+ @Composable
+ fun HomeScreen() {
+-
++    Column(modifier = Modifier.padding(16.dp)) {
++        Text(text = "HomeScreen", modifier = Modifier.padding(16.dp))
++    }
++}
++
++@Preview(showBackground = true)
++@Composable
++fun HomeScreenPreview(){
++
++    HomeScreen()
+ }
+ 
+ 
+--- a/app/src/main/java/com/example/taxicab/ui/MainActivityScreen.kt
++++ b/app/src/main/java/com/example/taxicab/ui/MainActivityScreen.kt
+@@ -1,14 +1,67 @@
+ package com.example.taxicab.ui
+ 
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.padding
++import androidx.compose.material3.ExperimentalMaterial3Api
++import androidx.compose.material3.Scaffold
++import androidx.compose.material3.Text
++import androidx.compose.material3.TopAppBar
+ import androidx.compose.runtime.Composable
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.tooling.preview.Preview
++import androidx.compose.ui.unit.dp
++
++
++@OptIn(ExperimentalMaterial3Api::class)
+ @Composable
+ fun MainActivityScreen(){
++    Scaffold (
++        topBar = {
++           AppTopBar()
++        }
++    ){
++        paddingValues ->
++        Column(modifier = Modifier.padding(paddingValues)) {
++            HomeScreen()
++
++        }
++
++    }
++}
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun AppTopBar(){
++
++    TopAppBar(title = {
++        Text(text = "TaxiCab")
++    })
+ 
+ }
+ 
+ 
++
++@Preview(showBackground = true)
++@Composable
++fun MainActivityScreenPreview() {
++
++    MainActivityScreen()
++}
++
++
++
++/*
++
++
++
++            Text(text = "Main activity")
+ 
+ 
++
++
++
++
++ */
++
+--- a/settings.gradle.kts
++++ b/settings.gradle.kts
+@@ -1,6 +1,7 @@
+ pluginManagement {
+     repositories {
+         google()
++        gradlePluginPortal()
+         mavenCentral()
+     }
+ }
+@@ -9,11 +10,13 @@
+     id("com.android.application") version "7.4.2" apply false
+     id("com.android.library") version "7.4.2" apply false
+     id("org.jetbrains.kotlin.android") version "1.8.10" apply false
++
+ }
+ 
+ dependencyResolutionManagement {
+     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+     repositories {
+         google()
++        
+         mavenCentral()
+     }
+ }
+--- a/app/src/main/java/com/example/taxicab/network/ApiService.kt
++++ b/app/src/main/java/com/example/taxicab/network/ApiService.kt
+@@ -1,7 +1,22 @@
+ package com.example.taxicab.network
+ 
++import com.example.taxicab.model.GetPost
++import retrofit2.http.GET
++
++
+ interface ApiService {
++
++   @GET("posts")
++   suspend fun getPosts() : List<GetPost>
++
+ }
++
++
++
++
++
++
++
++
+ 
+ 
+--- a/app/src/main/java/com/example/taxicab/network/RetrofitHelper.kt
++++ b/app/src/main/java/com/example/taxicab/network/RetrofitHelper.kt
+@@ -2,7 +2,9 @@
+ 
+ import okhttp3.OkHttpClient
+ import okhttp3.logging.HttpLoggingInterceptor
++import retrofit2.Retrofit
++import retrofit2.converter.gson.GsonConverterFactory
++
+ 
+ object RetrofitHelper {
+ 
+@@ -10,4 +12,16 @@
+         return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+     }
+ 
++
++    val client = OkHttpClient.Builder()
++        .addInterceptor(interceptor)
++        .build()
++
++
++    fun getInstance() : ApiService {
++        return Retrofit.Builder()
++            .baseUrl("https://jsonplaceholder.typicode.com/")
++            .addConverterFactory(GsonConverterFactory.create())
++            .client(client)
++            .build()
++            .create(ApiService::class.java)
++    }
+ }
+--- a/app/src/main/java/com/example/taxicab/model/GetPost.kt
++++ b/app/src/main/java/com/example/taxicab/model/GetPost.kt
+@@ -1,2 +1,8 @@
+ package com.example.taxicab.model
+ 
++
++data class GetPost(
++
++    val userId : Int,
++    val id : Int,
++    val title : String,
++    val body : String)
